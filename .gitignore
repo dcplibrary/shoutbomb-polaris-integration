@@ -1,0 +1,12 @@
+.DS_Store
+logs/*.txt
+logs/*.log
+*.log
+*/.DS_Store
+*/*/DS_Store
+sql/Polaris_SQL
+sql/Polaris_SQL/*.sql
+logs/*/
+scheduled_tasks/
+scheduled_tasks/*
+scheduled_tasks
