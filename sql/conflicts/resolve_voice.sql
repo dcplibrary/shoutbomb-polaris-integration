@@ -7,7 +7,14 @@
   @TODO: Add documentation.*/
 SET NOCOUNT ON
 DECLARE @TheDate date;
+DECLARE @NoteText nvarchar(255);
+DECLARE @NoteDate nvarchar(255);
+DECLARE @Note nvarchar(255);
 SET @TheDate = DATEADD(d, -1, GETDATE());
+SET @NoteText = 'SB to voice '; 
+SET @NoteDate = CONVERT(varchar, GETDATE(), 110);
+SET @Note = CONCAT(@NoteText, @NoteDate);
+
 DECLARE
     @PatronID int,
     @PhoneVoice1 varchar(20),
@@ -51,6 +58,20 @@ WHILE @@FETCH_STATUS = 0
         SET DeliveryOptionID = 3,
         TxtPhoneNumber = NULL
         WHERE PatronID = @PatronID;
+		IF EXISTS 
+			(SELECT * FROM [Polaris].[Polaris].[PatronCustomDataStrings]
+			WHERE PatronID = @PatronID AND PatronCustomDataDefinitionID = '16')
+			BEGIN
+				UPDATE [Polaris].[Polaris].[PatronCustomDataStrings]
+				SET CustomDataEntry = @Note
+				WHERE PatronID = @PatronID AND PatronCustomDataDefinitionID = '16'
+			END
+		ELSE
+			BEGIN
+				INSERT INTO [Polaris].[Polaris].[PatronCustomDataStrings]
+				(PatronID,PatronCustomDataDefinitionID,CustomDataEntry) VALUES
+				(@PatronID, '16', @Note);
+		END
         FETCH NEXT FROM pCursor INTO
 	        @PatronID,
             @PhoneVoice1,

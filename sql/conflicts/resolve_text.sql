@@ -1,19 +1,20 @@
-/*Find all patron accounts using the same phone number as a patron account that was modified today.
-  If the account that was modified this week is using texting notifications,
-  the script will update all other accounts using same number for text for phone notifications to the same method as the
-  recently update account.
-
-  Updates Phone1CarrierID to:
-  AT&T
+/*Find all patron accounts using the same phone number as a patron account that was modified yesterday.
+  If the account that was modified today is using texting notifications,
+  the script will update all other accounts using same number for phone notifications to text.
 
   */
 /*@TODO: Remove unnecessary variables.
   @TODO: Add documentation.*/
 SET NOCOUNT ON
 DECLARE @TheDate date;
-DECLARE @carrier int;
+DECLARE @NoteText nvarchar(255);
+DECLARE @NoteDate nvarchar(255);
+DECLARE @Note nvarchar(255);
 SET @TheDate = DATEADD(d, -1, GETDATE());
-SET @carrier = $(Provider);
+SET @NoteText = 'SB to text '; 
+SET @NoteDate = CONVERT(varchar, GETDATE(), 110);
+SET @Note = CONCAT(@NoteText, @NoteDate);
+
 DECLARE
     @PatronID int,
     @PhoneVoice1 varchar(20),
@@ -21,8 +22,6 @@ DECLARE
     @DeliveryOptionID int,
     @Phone1CarrierID int,
     @TxtPhoneNumber int;
-
-
 
 DECLARE pCursor CURSOR
     FOR
@@ -48,8 +47,7 @@ DECLARE pCursor CURSOR
           /*DeliveryOptionID = 3 selects patrons with phone notification option.*/
           AND DeliveryOptionID = 8
           /*Phone1CarrierID = 1 selects patrons with using AT&T.*/
-          --AND phonevoice1 = '2709935018'
-          AND Phone1CarrierID = @carrier
+
           AND TxtPhoneNumber = 1
           /*ExpirationDate > DATEADD(d, -1, GETDATE()) selects accounts that are not expired.*/
           AND ExpirationDate  > DATEADD(d, -1, GETDATE())) ORDER BY UpdateDate DESC;
@@ -66,8 +64,22 @@ WHILE @@FETCH_STATUS = 0
         UPDATE [Polaris].[Polaris].[PatronRegistration]
         SET DeliveryOptionID = 8,
         TxtPhoneNumber = 1,
-	    Phone1CarrierID = @carrier
+	    Phone1CarrierID = @Phone1CarrierID
         WHERE PatronID = @PatronID;
+		IF EXISTS 
+			(SELECT * FROM [Polaris].[Polaris].[PatronCustomDataStrings]
+			WHERE PatronID = @PatronID AND PatronCustomDataDefinitionID = '16')
+			BEGIN
+				UPDATE [Polaris].[Polaris].[PatronCustomDataStrings]
+				SET CustomDataEntry = @Note
+				WHERE PatronID = @PatronID AND PatronCustomDataDefinitionID = '16'
+			END
+			ELSE
+			BEGIN
+				INSERT INTO [Polaris].[Polaris].[PatronCustomDataStrings]
+				(PatronID,PatronCustomDataDefinitionID,CustomDataEntry) VALUES
+				(@PatronID, '16', @Note);
+			END
         FETCH NEXT FROM pCursor INTO
 	        @PatronID,
             @PhoneVoice1,
