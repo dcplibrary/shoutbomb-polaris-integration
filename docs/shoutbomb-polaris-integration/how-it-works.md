@@ -3,9 +3,10 @@
 ## Notification processing
 
 1. Scheduled tasks launch batch files at specified times. &#x20;
-2. The batch file runs an SQL script to query the Polaris database for notifications. &#x20;
-3. The SQL queries the Polaris database returns the notifications and writes them to a text file, in a Shoutbomb-friendly format.
-4. The batch file then uses a command-line FTP client to connect to Shoutbomb's FTP server and upload the file.  The batch file logs the process and a copy of the uploaded information is stored on the ILS server.
+2. The batch script runs a T-SQL script to query the Polaris database for notifications. &#x20;
+3. The batch script writes the query results to a text file, in a Shoutbomb-friendly format.
+4. The script then uses the WinSCP command-line client to connect to Shoutbomb's FTP server and upload the file.
+5. Finally, the script logs the process and stores a copy of the text files uploaded to Shoutbomb.
 
 ## Patron registration
 
