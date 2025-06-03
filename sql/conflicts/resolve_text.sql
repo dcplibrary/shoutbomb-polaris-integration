@@ -66,6 +66,9 @@ WHILE @@FETCH_STATUS = 0
         TxtPhoneNumber = 1,
 	    Phone1CarrierID = @Phone1CarrierID
         WHERE PatronID = @PatronID;
+		/* For DCPL Use only */
+		/*  Creates a note about the account changes in a Patron Custom Data Field */
+                /* specific to the Daviess County Public Library  
 		IF EXISTS 
 			(SELECT * FROM [Polaris].[Polaris].[PatronCustomDataStrings]
 			WHERE PatronID = @PatronID AND PatronCustomDataDefinitionID = '16')
@@ -80,6 +83,7 @@ WHILE @@FETCH_STATUS = 0
 				(PatronID,PatronCustomDataDefinitionID,CustomDataEntry) VALUES
 				(@PatronID, '16', @Note);
 			END
+           	   */
         FETCH NEXT FROM pCursor INTO
 	        @PatronID,
             @PhoneVoice1,
