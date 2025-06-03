@@ -1,7 +1,8 @@
 # Table of contents
 
 * [Shoutbomb-Polaris Integration](README.md)
-  * [Quick Start Guide](shoutbomb-polaris-integration/quick-start-guide.md)
-  * [Configure FTP Client](shoutbomb-polaris-integration/configure-ftp-client.md)
-  * [Schedule Tasks](shoutbomb-polaris-integration/schedule-tasks.md)
-  * [How it works](shoutbomb-polaris-integration/how-it-works.md)
+  * [Quick Start Guide](readme/quick-start-guide/README.md)
+    * [Configure FTP Client](readme/quick-start-guide/configure-ftp-client.md)
+    * [Schedule Tasks](readme/quick-start-guide/schedule-tasks.md)
+    * [How it works](readme/quick-start-guide/how-it-works.md)
+  * [Changelog](readme/changelog.md)

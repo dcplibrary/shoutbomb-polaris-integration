@@ -20,10 +20,10 @@ You must have administrator privileges and physical or remote desktop access to 
 
 ## Table of Contents
 
-[Quick Start Guide](shoutbomb-polaris-integration/quick-start-guide.md)
+[Quick Start Guide](readme/quick-start-guide/)
 
-[Configure FTP Client](shoutbomb-polaris-integration/configure-ftp-client.md)
+[Configure FTP Client](readme/quick-start-guide/configure-ftp-client.md)
 
-[Schedule Tasks](shoutbomb-polaris-integration/schedule-tasks.md)
+[Schedule Tasks](readme/quick-start-guide/schedule-tasks.md)
 
-[How it works](shoutbomb-polaris-integration/how-it-works.md)
+[How it works](readme/quick-start-guide/how-it-works.md)
